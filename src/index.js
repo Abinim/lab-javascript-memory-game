@@ -22,30 +22,39 @@ const cards = [
   { name: 'spiderman', img: 'spiderman.jpg' },
   { name: 'superman', img: 'superman.jpg' },
   { name: 'the avengers', img: 'the-avengers.jpg' },
-  { name: 'thor', img: 'thor.jpg' }
+  { name: 'thor', img: 'thor.jpg' },
 ];
 
-const memoryGame = new MemoryGame(cards);
+const memoryGame = new MemoryGame(cardNames);
 
-window.addEventListener('load', (event) => {
-  let html = '';
-  memoryGame.cards.forEach((pic) => {
-    html += `
-      <div class="card" data-card-name="${pic.name}">
-        <div class="back" name="${pic.img}"></div>
-        <div class="front" style="background: url(img/${pic.img}) no-repeat"></div>
-      </div>
-    `;
-  });
+memoryGame.shuffleCards();
 
-  // Add all the divs to the HTML
-  document.querySelector('#memory-board').innerHTML = html;
+const shuffledCards = memoryGame.getCards();
 
-  // Bind the click event of each element to a function
-  document.querySelectorAll('.card').forEach((card) => {
-    card.addEventListener('click', () => {
-      // TODO: write some code here
-      console.log(`Card clicked: ${card}`);
-    });
+const memoryBoard = document.getElementById('memory-board');
+
+shuffledCards.forEach(card => {
+  const cardElement = document.createElement('div');
+  cardElement.classList.add('card');
+
+  cardElement.setAttribute('data-card-name', card);
+
+  const frontElement = document.createElement('div');
+  frontElement.classList.add('front');
+  frontElement.style.background = `url(img/${card}.jpg) no-repeat`;
+
+  const backElement = document.createElement('div');
+  backElement.classList.add('back');
+  backElement.setAttribute('name', `${card}.jpg`);
+
+  cardElement.appendChild(frontElement);
+  cardElement.appendChild(backElement);
+
+  memoryBoard.appendChild(cardElement);
+});
+
+document.querySelectorAll('.card').forEach(card => {
+  card.addEventListener('click', () => {
+    console.log('Card clicked: ', card);
   });
 });
